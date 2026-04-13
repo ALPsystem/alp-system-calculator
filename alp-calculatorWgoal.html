@@ -8,19 +8,24 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; line-height: 1.6; }
         .calculator-container { max-width: 650px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         h2 { text-align: center; color: #2d3748; font-size: 1.6em; margin-bottom: 25px; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; }
+        
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .input-group { margin-bottom: 10px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9em; color: #4a5568; }
         input[type="number"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; font-size: 1.05em; transition: border-color 0.2s; }
         input[type="number"]:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1); }
+        
         .checkbox-group { display: flex; align-items: flex-start; margin-bottom: 15px; background: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #edf2f7; }
         .checkbox-group input { margin-top: 3px; margin-right: 12px; transform: scale(1.3); cursor: pointer; }
         .checkbox-group label { font-weight: normal; font-size: 0.95em; cursor: pointer; margin-bottom: 0; }
+        
         hr { border: 0; height: 1px; background: #e2e8f0; margin: 25px 0; }
+        
         .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .metric-box { background: #edf2f7; padding: 15px; border-radius: 8px; text-align: center; }
         .metric-value { font-size: 1.6em; font-weight: bold; color: #2b6cb0; margin-top: 5px; }
         .metric-label { font-size: 0.75em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        
         .phenotype-result { background: #ebf8fa; border-left: 6px solid #3182ce; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
         .phenotype-title { font-size: 1.25em; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
         .indication { font-size: 1em; color: #c53030; font-weight: 600; }
@@ -31,9 +36,19 @@
         .planning-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
         .plan-box { background: white; padding: 15px; border-radius: 6px; text-align: center; border: 1px solid #feebc8; transition: all 0.3s ease; }
         .plan-value { font-size: 1.6em; font-weight: bold; color: #dd6b20; margin-top: 5px; }
-        .plan-warning { grid-column: span 3; font-size: 0.85em; color: #c53030; background: #fff5f5; padding: 10px; border-radius: 4px; border-left: 3px solid #f56565; margin-top: 10px; display: none; }
+        .plan-warning { grid-column: 1 / -1; font-size: 0.85em; color: #c53030; background: #fff5f5; padding: 10px; border-radius: 4px; border-left: 3px solid #f56565; margin-top: 10px; display: none; }
+        
         .residual-alert { background: #fff5f5 !important; border-color: #fc8181 !important; }
         .residual-alert .plan-value { color: #e53e3e !important; }
+
+        /* --- MOBILE RESPONSIVENESS (New Code) --- */
+        @media (max-width: 600px) {
+            .calculator-container { padding: 15px; }
+            .input-grid { grid-template-columns: 1fr; } /* Stacks inputs 1 per row */
+            .results-grid { grid-template-columns: 1fr; } /* Stacks results 1 per row */
+            .planning-grid { grid-template-columns: 1fr; } /* Stacks planning boxes 1 per row */
+            .metric-box, .plan-box { padding: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -166,9 +181,9 @@
             phenotype = "Physiological Sagittal Baseline"; indication = "Indication: Low. Shift is within physiological noise."; sroIndicated = false;
         }
 
-        // --- NEW SAFETY OVERRIDE: HARD LIMIT AT OR BELOW 11 DEGREES ---
+        // SAFETY OVERRIDE: HARD LIMIT AT OR BELOW 11 DEGREES
         if (ptsI <= 11) {
-            sroIndicated = false; // Strictly kills the planning module
+            sroIndicated = false; 
             indication = "Indication: SRO CONTRAINDICATED (Index PTS ≤ 11°). Proceed with soft-tissue/meniscal management only.";
         }
 

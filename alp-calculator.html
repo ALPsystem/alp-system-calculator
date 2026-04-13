@@ -1,154 +1,139 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALP System Calculator</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; }
+        .calculator-container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #2c3e50; font-size: 1.5em; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9em; color: #4a5568; }
+        input[type="number"] { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 5px; box-sizing: border-box; font-size: 1em; }
+        .checkbox-group { display: flex; align-items: flex-start; margin-bottom: 15px; }
+        .checkbox-group input { margin-top: 4px; margin-right: 10px; transform: scale(1.2); }
+        .checkbox-group label { font-weight: normal; font-size: 0.95em; cursor: pointer; }
+        hr { border: 0; height: 1px; background: #e2e8f0; margin: 25px 0; }
+        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .metric-box { background: #edf2f7; padding: 15px; border-radius: 8px; text-align: center; }
+        .metric-value { font-size: 1.5em; font-weight: bold; color: #2b6cb0; margin-top: 5px; }
+        .metric-label { font-size: 0.8em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }
+        .phenotype-result { background: #ebf8fa; border-left: 5px solid #3182ce; padding: 20px; border-radius: 0 8px 8px 0; }
+        .phenotype-title { font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
+        .indication { font-size: 1em; color: #e53e3e; font-weight: 600; }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;ALP System Calculator&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.calculator-container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>h2 { text-align: center; color: #2c3e50; font-size: 1.5em; margin-bottom: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.input-group { margin-bottom: 15px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9em; color: #4a5568; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>input[type="number"] { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 5px; box-sizing: border-box; font-size: 1em; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-group { display: flex; align-items: flex-start; margin-bottom: 15px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-group input { margin-top: 4px; margin-right: 10px; transform: scale(1.2); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-group label { font-weight: normal; font-size: 0.95em; cursor: pointer; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>hr { border: 0; height: 1px; background: #e2e8f0; margin: 25px 0; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.metric-box { background: #edf2f7; padding: 15px; border-radius: 8px; text-align: center; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.metric-value { font-size: 1.5em; font-weight: bold; color: #2b6cb0; margin-top: 5px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.metric-label { font-size: 0.8em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.phenotype-result { background: #ebf8fa; border-left: 5px solid #3182ce; padding: 20px; border-radius: 0 8px 8px 0; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.phenotype-title { font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.indication { font-size: 1em; color: #e53e3e; font-weight: 600; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;div class="calculator-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h2&gt;ALP System Sagittal Phenotyping&lt;/h2&gt;</p>
-<p class="p2"><span class="Apple-converted-space">    </span></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="input-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Index Knee PTS (°)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="number" id="ptsIndex" value="12" step="0.1" oninput="calculateALP()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="input-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Contralateral Knee PTS (°)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="number" id="ptsContra" value="10" step="0.1" oninput="calculateALP()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="input-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Index Knee sATT (%)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="number" id="sattIndex" value="25" step="0.1" oninput="calculateALP()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="input-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;label&gt;Contralateral Knee sATT (%)&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="number" id="sattContra" value="15" step="0.1" oninput="calculateALP()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="checkbox-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="checkbox" id="isChronic" onchange="calculateALP()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;label for="isChronic"&gt;&lt;b&gt;Chronic Injury&lt;/b&gt; (&gt;12 months) OR &lt;b&gt;Meniscal Deficiency&lt;/b&gt;&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="checkbox-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="checkbox" id="isLaxity" onchange="calculateALP()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;label for="isLaxity"&gt;&lt;b&gt;Inherent Hyperlaxity&lt;/b&gt; / High Bilateral Baseline sATT&lt;/label&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;hr&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="results-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="metric-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="metric-label"&gt;Raw ΔsATT&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="metric-value" id="valRawSatt"&gt;0.0%&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="metric-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="metric-label"&gt;ΔPTS&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="metric-value" id="valDeltaPts"&gt;0.0°&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="metric-box" style="background:#e6fffa; border: 1px solid #38b2ac;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="metric-label"&gt;Adjusted ΔsATT&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="metric-value" id="valAdjSatt" style="color:#2c7a7b;"&gt;0.0%&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="phenotype-result"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="phenotype-title" id="resultPhenotype"&gt;Awaiting inputs...&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="indication" id="resultIndication"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>function calculateALP() {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const ptsI = parseFloat(document.getElementById('ptsIndex').value) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const ptsC = parseFloat(document.getElementById('ptsContra').value) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const sattI = parseFloat(document.getElementById('sattIndex').value) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const sattC = parseFloat(document.getElementById('sattContra').value) || 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const chronic = document.getElementById('isChronic').checked;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const laxity = document.getElementById('isLaxity').checked;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Metrics</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const rawDeltaSatt = sattI - sattC;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const deltaPts = ptsI - ptsC;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const adjDeltaSatt = rawDeltaSatt - (deltaPts * 1.2);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('valRawSatt').innerText = rawDeltaSatt.toFixed(1) + '%';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('valDeltaPts').innerText = deltaPts.toFixed(1) + '°';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('valAdjSatt').innerText = adjDeltaSatt.toFixed(1) + '%';</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Logic</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const steepBone = ptsI &gt;= 12;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const pathologicalShift = adjDeltaSatt &gt;= 7;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const benignShift = adjDeltaSatt &lt;= 3;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let phenotype = "Unclassified / Transition Zone";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let indication = "Clinical correlation required.";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (steepBone &amp;&amp; pathologicalShift &amp;&amp; chronic &amp;&amp; laxity) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "The Triple Hit (Catastrophic)";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: Critical";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (steepBone &amp;&amp; pathologicalShift &amp;&amp; chronic &amp;&amp; !laxity) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "Double Hit A (Synergistic Failure)";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: High";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (steepBone &amp;&amp; pathologicalShift &amp;&amp; !chronic &amp;&amp; laxity) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "Double Hit C (Compounded Risk)";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: Moderate to High";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (!steepBone &amp;&amp; pathologicalShift &amp;&amp; !chronic &amp;&amp; laxity) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "Double Hit B (Acute-on-Baseline)";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: Moderate";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (steepBone &amp;&amp; pathologicalShift &amp;&amp; !chronic &amp;&amp; !laxity) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "Type 1: Osseous (PTS-Driven)";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: Moderate to High";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (!steepBone &amp;&amp; pathologicalShift &amp;&amp; chronic &amp;&amp; !laxity) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "Type 2: Acquired Soft-Tissue";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: Moderate to High";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>} else if (laxity &amp;&amp; benignShift) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>indication = "Indication: Low / Contraindicated";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('resultPhenotype').innerText = phenotype;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('resultIndication').innerText = indication;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Initialize on load</p>
-<p class="p1"><span class="Apple-converted-space">    </span>calculateALP();</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+<div class="calculator-container">
+    <h2>ALP System Sagittal Phenotyping</h2>
+    
+    <div class="input-group">
+        <label>Index Knee PTS (°)</label>
+        <input type="number" id="ptsIndex" value="12" step="0.1" oninput="calculateALP()">
+    </div>
+    <div class="input-group">
+        <label>Contralateral Knee PTS (°)</label>
+        <input type="number" id="ptsContra" value="10" step="0.1" oninput="calculateALP()">
+    </div>
+    <div class="input-group">
+        <label>Index Knee sATT (%)</label>
+        <input type="number" id="sattIndex" value="25" step="0.1" oninput="calculateALP()">
+    </div>
+    <div class="input-group">
+        <label>Contralateral Knee sATT (%)</label>
+        <input type="number" id="sattContra" value="15" step="0.1" oninput="calculateALP()">
+    </div>
+
+    <div class="checkbox-group">
+        <input type="checkbox" id="isChronic" onchange="calculateALP()">
+        <label for="isChronic"><b>Chronic Injury</b> (>12 months) OR <b>Meniscal Deficiency</b></label>
+    </div>
+    <div class="checkbox-group">
+        <input type="checkbox" id="isLaxity" onchange="calculateALP()">
+        <label for="isLaxity"><b>Inherent Hyperlaxity</b> / High Bilateral Baseline sATT</label>
+    </div>
+
+    <hr>
+
+    <div class="results-grid">
+        <div class="metric-box">
+            <div class="metric-label">Raw ΔsATT</div>
+            <div class="metric-value" id="valRawSatt">0.0%</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-label">ΔPTS</div>
+            <div class="metric-value" id="valDeltaPts">0.0°</div>
+        </div>
+        <div class="metric-box" style="background:#e6fffa; border: 1px solid #38b2ac;">
+            <div class="metric-label">Adjusted ΔsATT</div>
+            <div class="metric-value" id="valAdjSatt" style="color:#2c7a7b;">0.0%</div>
+        </div>
+    </div>
+
+    <div class="phenotype-result">
+        <div class="phenotype-title" id="resultPhenotype">Awaiting inputs...</div>
+        <div class="indication" id="resultIndication"></div>
+    </div>
+</div>
+
+<script>
+    function calculateALP() {
+        const ptsI = parseFloat(document.getElementById('ptsIndex').value) || 0;
+        const ptsC = parseFloat(document.getElementById('ptsContra').value) || 0;
+        const sattI = parseFloat(document.getElementById('sattIndex').value) || 0;
+        const sattC = parseFloat(document.getElementById('sattContra').value) || 0;
+        const chronic = document.getElementById('isChronic').checked;
+        const laxity = document.getElementById('isLaxity').checked;
+
+        // Metrics
+        const rawDeltaSatt = sattI - sattC;
+        const deltaPts = ptsI - ptsC;
+        const adjDeltaSatt = rawDeltaSatt - (deltaPts * 1.2);
+
+        document.getElementById('valRawSatt').innerText = rawDeltaSatt.toFixed(1) + '%';
+        document.getElementById('valDeltaPts').innerText = deltaPts.toFixed(1) + '°';
+        document.getElementById('valAdjSatt').innerText = adjDeltaSatt.toFixed(1) + '%';
+
+        // Logic
+        const steepBone = ptsI >= 12;
+        const pathologicalShift = adjDeltaSatt >= 7;
+        const benignShift = adjDeltaSatt <= 3;
+
+        let phenotype = "Unclassified / Transition Zone";
+        let indication = "Clinical correlation required.";
+
+        if (steepBone && pathologicalShift && chronic && laxity) {
+            phenotype = "The Triple Hit (Catastrophic)";
+            indication = "Indication: Critical";
+        } else if (steepBone && pathologicalShift && chronic && !laxity) {
+            phenotype = "Double Hit A (Synergistic Failure)";
+            indication = "Indication: High";
+        } else if (steepBone && pathologicalShift && !chronic && laxity) {
+            phenotype = "Double Hit C (Compounded Risk)";
+            indication = "Indication: Moderate to High";
+        } else if (!steepBone && pathologicalShift && !chronic && laxity) {
+            phenotype = "Double Hit B (Acute-on-Baseline)";
+            indication = "Indication: Moderate";
+        } else if (steepBone && pathologicalShift && !chronic && !laxity) {
+            phenotype = "Type 1: Osseous (PTS-Driven)";
+            indication = "Indication: Moderate to High";
+        } else if (!steepBone && pathologicalShift && chronic && !laxity) {
+            phenotype = "Type 2: Acquired Soft-Tissue";
+            indication = "Indication: Moderate to High";
+        } else if (laxity && benignShift) {
+            phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)";
+            indication = "Indication: Low / Contraindicated";
+        }
+
+        document.getElementById('resultPhenotype').innerText = phenotype;
+        document.getElementById('resultIndication').innerText = indication;
+    }
+
+    // Initialize on load
+    calculateALP();
+</script>
+
 </body>
 </html>

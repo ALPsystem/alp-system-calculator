@@ -5,23 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALP System Calculator</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; }
-        .calculator-container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #2c3e50; font-size: 1.5em; margin-bottom: 20px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.9em; color: #4a5568; }
-        input[type="number"] { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 5px; box-sizing: border-box; font-size: 1em; }
-        .checkbox-group { display: flex; align-items: flex-start; margin-bottom: 15px; }
-        .checkbox-group input { margin-top: 4px; margin-right: 10px; transform: scale(1.2); }
-        .checkbox-group label { font-weight: normal; font-size: 0.95em; cursor: pointer; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; line-height: 1.6; }
+        .calculator-container { max-width: 650px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: #2d3748; font-size: 1.6em; margin-bottom: 25px; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; }
+        
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-group { margin-bottom: 10px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9em; color: #4a5568; }
+        input[type="number"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; font-size: 1.05em; transition: border-color 0.2s; }
+        input[type="number"]:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1); }
+        
+        .checkbox-group { display: flex; align-items: flex-start; margin-bottom: 15px; background: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #edf2f7; }
+        .checkbox-group input { margin-top: 3px; margin-right: 12px; transform: scale(1.3); cursor: pointer; }
+        .checkbox-group label { font-weight: normal; font-size: 0.95em; cursor: pointer; margin-bottom: 0; }
+        
         hr { border: 0; height: 1px; background: #e2e8f0; margin: 25px 0; }
-        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        
+        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
         .metric-box { background: #edf2f7; padding: 15px; border-radius: 8px; text-align: center; }
-        .metric-value { font-size: 1.5em; font-weight: bold; color: #2b6cb0; margin-top: 5px; }
-        .metric-label { font-size: 0.8em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; }
-        .phenotype-result { background: #ebf8fa; border-left: 5px solid #3182ce; padding: 20px; border-radius: 0 8px 8px 0; }
-        .phenotype-title { font-size: 1.2em; font-weight: bold; color: #2c3e50; margin-bottom: 5px; }
-        .indication { font-size: 1em; color: #e53e3e; font-weight: 600; }
+        .metric-value { font-size: 1.6em; font-weight: bold; color: #2b6cb0; margin-top: 5px; }
+        .metric-label { font-size: 0.75em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        
+        .phenotype-result { background: #ebf8fa; border-left: 6px solid #3182ce; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
+        .phenotype-title { font-size: 1.25em; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
+        .indication { font-size: 1em; color: #c53030; font-weight: 600; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 600px) {
+            .calculator-container { padding: 15px; }
+            .input-grid { grid-template-columns: 1fr; } /* Stacks inputs 1 per row */
+            .results-grid { grid-template-columns: 1fr; } /* Stacks results 1 per row */
+            .metric-box { padding: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -29,21 +44,23 @@
 <div class="calculator-container">
     <h2>ALP System Sagittal Phenotyping</h2>
     
-    <div class="input-group">
-        <label>Index Knee PTS (°)</label>
-        <input type="number" id="ptsIndex" value="12" step="0.1" oninput="calculateALP()">
-    </div>
-    <div class="input-group">
-        <label>Contralateral Knee PTS (°)</label>
-        <input type="number" id="ptsContra" value="10" step="0.1" oninput="calculateALP()">
-    </div>
-    <div class="input-group">
-        <label>Index Knee sATT (%)</label>
-        <input type="number" id="sattIndex" value="25" step="0.1" oninput="calculateALP()">
-    </div>
-    <div class="input-group">
-        <label>Contralateral Knee sATT (%)</label>
-        <input type="number" id="sattContra" value="15" step="0.1" oninput="calculateALP()">
+    <div class="input-grid">
+        <div class="input-group">
+            <label>Index Knee PTS (°)</label>
+            <input type="number" id="ptsIndex" value="12" step="0.1" oninput="calculateALP()">
+        </div>
+        <div class="input-group">
+            <label>Contra. Knee PTS (°)</label>
+            <input type="number" id="ptsContra" value="5" step="0.1" oninput="calculateALP()">
+        </div>
+        <div class="input-group">
+            <label>Index Knee sATT (%)</label>
+            <input type="number" id="sattIndex" value="15" step="0.1" oninput="calculateALP()">
+        </div>
+        <div class="input-group">
+            <label>Contra. Knee sATT (%)</label>
+            <input type="number" id="sattContra" value="0" step="0.1" oninput="calculateALP()">
+        </div>
     </div>
 
     <div class="checkbox-group">
@@ -76,6 +93,7 @@
         <div class="phenotype-title" id="resultPhenotype">Awaiting inputs...</div>
         <div class="indication" id="resultIndication"></div>
     </div>
+
 </div>
 
 <script>
@@ -87,7 +105,7 @@
         const chronic = document.getElementById('isChronic').checked;
         const laxity = document.getElementById('isLaxity').checked;
 
-        // Metrics
+        // Core Metrics
         const rawDeltaSatt = sattI - sattC;
         const deltaPts = ptsI - ptsC;
         const adjDeltaSatt = rawDeltaSatt - (deltaPts * 1.2);
@@ -96,35 +114,41 @@
         document.getElementById('valDeltaPts').innerText = deltaPts.toFixed(1) + '°';
         document.getElementById('valAdjSatt').innerText = adjDeltaSatt.toFixed(1) + '%';
 
-        // Logic
+        // Phenotype Logic
         const steepBone = ptsI >= 12;
         const pathologicalShift = adjDeltaSatt >= 7;
         const benignShift = adjDeltaSatt <= 3;
+        const transitionZone = adjDeltaSatt > 3 && adjDeltaSatt < 7;
 
-        let phenotype = "Unclassified / Transition Zone";
+        let phenotype = "Unclassified Data";
         let indication = "Clinical correlation required.";
 
         if (steepBone && pathologicalShift && chronic && laxity) {
-            phenotype = "The Triple Hit (Catastrophic)";
-            indication = "Indication: Critical";
+            phenotype = "The Triple Hit (Catastrophic)"; indication = "Indication: Critical. Mandatory SRO."; 
         } else if (steepBone && pathologicalShift && chronic && !laxity) {
-            phenotype = "Double Hit A (Synergistic Failure)";
-            indication = "Indication: High";
+            phenotype = "Double Hit A (Synergistic Failure)"; indication = "Indication: High. SRO critical to restore equilibrium."; 
         } else if (steepBone && pathologicalShift && !chronic && laxity) {
-            phenotype = "Double Hit C (Compounded Risk)";
-            indication = "Indication: Moderate to High";
+            phenotype = "Double Hit C (Compounded Risk)"; indication = "Indication: Moderate to High. Consider SRO + LET."; 
         } else if (!steepBone && pathologicalShift && !chronic && laxity) {
-            phenotype = "Double Hit B (Acute-on-Baseline)";
-            indication = "Indication: Moderate";
+            phenotype = "Double Hit B (Acute-on-Baseline)"; indication = "Indication: Moderate. Heightened need for augmented stabilization."; 
         } else if (steepBone && pathologicalShift && !chronic && !laxity) {
-            phenotype = "Type 1: Osseous (PTS-Driven)";
-            indication = "Indication: Moderate to High";
+            phenotype = "Type 1: Osseous (PTS-Driven)"; indication = "Indication: Moderate to High. Proactive SRO protects intact secondary stabilizers."; 
         } else if (!steepBone && pathologicalShift && chronic && !laxity) {
-            phenotype = "Type 2: Acquired Soft-Tissue";
-            indication = "Indication: Moderate to High";
+            phenotype = "Type 2: Acquired Soft-Tissue"; indication = "Indication: Moderate to High. SRO protects central pivot/meniscal repair."; 
         } else if (laxity && benignShift) {
-            phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)";
-            indication = "Indication: Low / Contraindicated";
+            phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)"; indication = "Indication: Low / Contraindicated. Risk of overtreatment."; 
+        } else if (transitionZone) {
+            phenotype = "Transition / Gray Zone (Sub-Critical Shift)"; 
+            indication = "Indication: Borderline. Ongoing decompensation. SRO planning is optional/preventative."; 
+        } else if (adjDeltaSatt > 0 && !benignShift) {
+            phenotype = "Atypical Pathological Shift"; indication = "Indication: Evaluated on a case-by-case basis."; 
+        } else if (benignShift && !laxity) {
+            phenotype = "Physiological Sagittal Baseline"; indication = "Indication: Low. Shift is within physiological noise."; 
+        }
+
+        // SAFETY OVERRIDE: HARD LIMIT AT OR BELOW 11 DEGREES
+        if (ptsI <= 11 && !benignShift) {
+            indication = "Indication: SRO CONTRAINDICATED (Index PTS ≤ 11°). Proceed with soft-tissue/meniscal management only.";
         }
 
         document.getElementById('resultPhenotype').innerText = phenotype;

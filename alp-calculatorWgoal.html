@@ -166,6 +166,12 @@
             phenotype = "Physiological Sagittal Baseline"; indication = "Indication: Low. Shift is within physiological noise."; sroIndicated = false;
         }
 
+        // --- NEW SAFETY OVERRIDE: HARD LIMIT AT OR BELOW 11 DEGREES ---
+        if (ptsI <= 11) {
+            sroIndicated = false; // Strictly kills the planning module
+            indication = "Indication: SRO CONTRAINDICATED (Index PTS ≤ 11°). Proceed with soft-tissue/meniscal management only.";
+        }
+
         document.getElementById('resultPhenotype').innerText = phenotype;
         document.getElementById('resultIndication').innerText = indication;
 
@@ -191,7 +197,7 @@
 
             if (idealTargetPts < minAllowedPts) {
                 finalTargetPts = minAllowedPts;
-                finalCorrection = Math.max(0, ptsI - minAllowedPts); // Prevent negative correction if Index is already < 4
+                finalCorrection = Math.max(0, ptsI - minAllowedPts); 
                 residualShift = adjDeltaSatt - (finalCorrection * 1.2);
                 hitLimit = true;
             }
@@ -203,7 +209,7 @@
             // Visual Styling for Residual Shift
             if (hitLimit && residualShift > 0) {
                 boxResidual.classList.add('residual-alert');
-                boxResidual.style.background = ''; // Clear default to let class override
+                boxResidual.style.background = ''; 
                 boxResidual.style.borderColor = '';
                 valResidual.style.color = '';
             } else {

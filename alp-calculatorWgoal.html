@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALP System Calculator</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; line-height: 1.6; }
+        .calculator-container { max-width: 650px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: #2d3748; font-size: 1.6em; margin-bottom: 25px; border-bottom: 2px solid #edf2f7; padding-bottom: 15px; }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .input-group { margin-bottom: 10px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9em; color: #4a5568; }
+        input[type="number"] { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; box-sizing: border-box; font-size: 1.05em; transition: border-color 0.2s; }
+        input[type="number"]:focus { border-color: #3182ce; outline: none; box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1); }
+        .checkbox-group { display: flex; align-items: flex-start; margin-bottom: 15px; background: #f7fafc; padding: 12px; border-radius: 6px; border: 1px solid #edf2f7; }
+        .checkbox-group input { margin-top: 3px; margin-right: 12px; transform: scale(1.3); cursor: pointer; }
+        .checkbox-group label { font-weight: normal; font-size: 0.95em; cursor: pointer; margin-bottom: 0; }
+        hr { border: 0; height: 1px; background: #e2e8f0; margin: 25px 0; }
+        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+        .metric-box { background: #edf2f7; padding: 15px; border-radius: 8px; text-align: center; }
+        .metric-value { font-size: 1.6em; font-weight: bold; color: #2b6cb0; margin-top: 5px; }
+        .metric-label { font-size: 0.75em; color: #4a5568; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+        .phenotype-result { background: #ebf8fa; border-left: 6px solid #3182ce; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
+        .phenotype-title { font-size: 1.25em; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
+        .indication { font-size: 1em; color: #c53030; font-weight: 600; }
+        
+        /* Surgical Planning Section Styles */
+        .planning-section { background: #fffaf0; border: 1px solid #feebc8; padding: 20px; border-radius: 8px; display: none; }
+        .planning-title { font-size: 1.1em; font-weight: bold; color: #dd6b20; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .planning-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .plan-box { background: white; padding: 15px; border-radius: 6px; text-align: center; border: 1px solid #feebc8; }
+        .plan-value { font-size: 1.6em; font-weight: bold; color: #dd6b20; margin-top: 5px; }
+        .plan-warning { grid-column: span 3; font-size: 0.85em; color: #c53030; background: #fff5f5; padding: 10px; border-radius: 4px; border-left: 3px solid #f56565; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="calculator-container">
+    <h2>ALP System Sagittal Phenotyping</h2>
+    
+    <div class="input-grid">
+        <div class="input-group">
+            <label>Index Knee PTS (°)</label>
+            <input type="number" id="ptsIndex" value="12" step="0.1" oninput="calculateALP()">
+        </div>
+        <div class="input-group">
+            <label>Contra. Knee PTS (°)</label>
+            <input type="number" id="ptsContra" value="5" step="0.1" oninput="calculateALP()">
+        </div>
+        <div class="input-group">
+            <label>Index Knee sATT (%)</label>
+            <input type="number" id="sattIndex" value="15" step="0.1" oninput="calculateALP()">
+        </div>
+        <div class="input-group">
+            <label>Contra. Knee sATT (%)</label>
+            <input type="number" id="sattContra" value="0" step="0.1" oninput="calculateALP()">
+        </div>
+    </div>
+
+    <div class="checkbox-group">
+        <input type="checkbox" id="isChronic" onchange="calculateALP()">
+        <label for="isChronic"><b>Chronic Injury</b> (>12 months) OR <b>Meniscal Deficiency</b></label>
+    </div>
+    <div class="checkbox-group">
+        <input type="checkbox" id="isLaxity" onchange="calculateALP()">
+        <label for="isLaxity"><b>Inherent Hyperlaxity</b> / High Bilateral Baseline sATT</label>
+    </div>
+
+    <hr>
+
+    <div class="results-grid">
+        <div class="metric-box">
+            <div class="metric-label">Raw ΔsATT</div>
+            <div class="metric-value" id="valRawSatt">0.0%</div>
+        </div>
+        <div class="metric-box">
+            <div class="metric-label">ΔPTS</div>
+            <div class="metric-value" id="valDeltaPts">0.0°</div>
+        </div>
+        <div class="metric-box" style="background:#e6fffa; border: 1px solid #38b2ac;">
+            <div class="metric-label">Adjusted ΔsATT</div>
+            <div class="metric-value" id="valAdjSatt" style="color:#2c7a7b;">0.0%</div>
+        </div>
+    </div>
+
+    <div class="phenotype-result">
+        <div class="phenotype-title" id="resultPhenotype">Awaiting inputs...</div>
+        <div class="indication" id="resultIndication"></div>
+    </div>
+
+    <div class="planning-section" id="planningSection">
+        <div class="planning-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            SRO Planning Goal
+        </div>
+        <div class="planning-grid">
+            <div class="plan-box">
+                <div class="metric-label">Required Correction</div>
+                <div class="plan-value" id="valCorrection">-0.0°</div>
+            </div>
+            <div class="plan-box">
+                <div class="metric-label">Target Post-Op PTS</div>
+                <div class="plan-value" id="valTargetPts">0.0°</div>
+            </div>
+            <div class="plan-box" style="background:#e6fffa; border-color:#38b2ac;">
+                <div class="metric-label">Projected Pathological ΔsATT</div>
+                <div class="plan-value" style="color:#2c7a7b;">0.0%</div>
+            </div>
+            <div class="plan-warning" id="warningMessage"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculateALP() {
+        const ptsI = parseFloat(document.getElementById('ptsIndex').value) || 0;
+        const ptsC = parseFloat(document.getElementById('ptsContra').value) || 0;
+        const sattI = parseFloat(document.getElementById('sattIndex').value) || 0;
+        const sattC = parseFloat(document.getElementById('sattContra').value) || 0;
+        const chronic = document.getElementById('isChronic').checked;
+        const laxity = document.getElementById('isLaxity').checked;
+
+        // Core Metrics
+        const rawDeltaSatt = sattI - sattC;
+        const deltaPts = ptsI - ptsC;
+        const adjDeltaSatt = rawDeltaSatt - (deltaPts * 1.2);
+
+        document.getElementById('valRawSatt').innerText = rawDeltaSatt.toFixed(1) + '%';
+        document.getElementById('valDeltaPts').innerText = deltaPts.toFixed(1) + '°';
+        document.getElementById('valAdjSatt').innerText = adjDeltaSatt.toFixed(1) + '%';
+
+        // Phenotype Logic
+        const steepBone = ptsI >= 12;
+        const pathologicalShift = adjDeltaSatt >= 7;
+        const benignShift = adjDeltaSatt <= 3;
+        const transitionZone = adjDeltaSatt > 3 && adjDeltaSatt < 7;
+
+        let phenotype = "Unclassified Data";
+        let indication = "Clinical correlation required.";
+        let sroIndicated = false;
+
+        if (steepBone && pathologicalShift && chronic && laxity) {
+            phenotype = "The Triple Hit (Catastrophic)"; indication = "Indication: Critical. Mandatory SRO."; sroIndicated = true;
+        } else if (steepBone && pathologicalShift && chronic && !laxity) {
+            phenotype = "Double Hit A (Synergistic Failure)"; indication = "Indication: High. SRO critical to restore equilibrium."; sroIndicated = true;
+        } else if (steepBone && pathologicalShift && !chronic && laxity) {
+            phenotype = "Double Hit C (Compounded Risk)"; indication = "Indication: Moderate to High. Consider SRO + LET."; sroIndicated = true;
+        } else if (!steepBone && pathologicalShift && !chronic && laxity) {
+            phenotype = "Double Hit B (Acute-on-Baseline)"; indication = "Indication: Moderate. Heightened need for augmented stabilization."; sroIndicated = true;
+        } else if (steepBone && pathologicalShift && !chronic && !laxity) {
+            phenotype = "Type 1: Osseous (PTS-Driven)"; indication = "Indication: Moderate to High. Proactive SRO protects intact secondary stabilizers."; sroIndicated = true;
+        } else if (!steepBone && pathologicalShift && chronic && !laxity) {
+            phenotype = "Type 2: Acquired Soft-Tissue"; indication = "Indication: Moderate to High. SRO protects central pivot/meniscal repair."; sroIndicated = true;
+        } else if (laxity && benignShift) {
+            phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)"; indication = "Indication: Low / Contraindicated. Risk of overtreatment."; sroIndicated = false;
+        } else if (transitionZone) {
+            // NEW: Explicitly catching the 3.1% to 6.9% gray zone
+            phenotype = "Transition / Gray Zone (Sub-Critical Shift)"; 
+            indication = "Indication: Borderline. Ongoing decompensation. SRO planning is optional/preventative."; 
+            sroIndicated = true; // Set to true so the calculator STILL provides the correction math
+        } else if (adjDeltaSatt > 0 && !benignShift) {
+            // Ultimate Catch-all
+            phenotype = "Atypical Pathological Shift"; indication = "Indication: Evaluated on a case-by-case basis."; sroIndicated = true;
+        } else if (benignShift && !laxity) {
+            phenotype = "Physiological Sagittal Baseline"; indication = "Indication: Low. Shift is within physiological noise."; sroIndicated = false;
+        }
+
+        document.getElementById('resultPhenotype').innerText = phenotype;
+        document.getElementById('resultIndication').innerText = indication;
+
+        // Surgical Planning Logic
+        const planningSection = document.getElementById('planningSection');
+        const warningMessage = document.getElementById('warningMessage');
+        
+        // Show planning if there is ANY pathological shift (>3%) that needs correcting
+        if (sroIndicated && adjDeltaSatt > 0) {
+            planningSection.style.display = 'block';
+            
+            // Calculate correction (1 degree per 1.2% shift) to neutralize the pathological shift to 0
+            const requiredCorrection = adjDeltaSatt / 1.2;
+            const targetPts = ptsI - requiredCorrection;
+            
+            document.getElementById('valCorrection').innerText = '-' + requiredCorrection.toFixed(1) + '°';
+            document.getElementById('valTargetPts').innerText = targetPts.toFixed(1) + '°';
+
+            // Safety Warnings
+            let warnings = [];
+            if (targetPts < 0) {
+                warnings.push("⚠️ WARNING: Target PTS is negative. High risk of inducing an anterior slope and iatrogenic recurvatum.");
+            }
+            if (requiredCorrection >= 10) {
+                warnings.push("⚠️ WARNING: Required correction is massive (≥10°). Consider biplanar osteotomy to mitigate hinge fracture risk.");
+            }
+
+            if (warnings.length > 0) {
+                warningMessage.innerHTML = warnings.join('<br>');
+                warningMessage.style.display = 'block';
+            } else {
+                warningMessage.style.display = 'none';
+            }
+
+        } else {
+            planningSection.style.display = 'none';
+        }
+    }
+
+    // Initialize on load
+    calculateALP();
+</script>
+
+</body>
+</html>

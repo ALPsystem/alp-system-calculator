@@ -29,25 +29,16 @@
         .phenotype-result { background: #ebf8fa; border-left: 6px solid #3182ce; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
         .phenotype-title { font-size: 1.25em; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
         .indication { font-size: 1em; color: #c53030; font-weight: 600; }
-        
-        /* Surgical Planning Section Styles */
-        .planning-section { background: #fffaf0; border: 1px solid #feebc8; padding: 20px; border-radius: 8px; display: none; }
-        .planning-title { font-size: 1.1em; font-weight: bold; color: #dd6b20; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .planning-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .plan-box { background: white; padding: 15px; border-radius: 6px; text-align: center; border: 1px solid #feebc8; transition: all 0.3s ease; }
-        .plan-value { font-size: 1.6em; font-weight: bold; color: #dd6b20; margin-top: 5px; }
-        .plan-warning { grid-column: 1 / -1; font-size: 0.85em; color: #c53030; background: #fff5f5; padding: 10px; border-radius: 4px; border-left: 3px solid #f56565; margin-top: 10px; display: none; }
-        
-        .residual-alert { background: #fff5f5 !important; border-color: #fc8181 !important; }
-        .residual-alert .plan-value { color: #e53e3e !important; }
 
-        /* --- MOBILE RESPONSIVENESS (New Code) --- */
+        .disclosure { font-size: 0.75em; color: #718096; background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 25px; line-height: 1.5; text-align: justify; }
+        .disclosure strong { color: #4a5568; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 600px) {
             .calculator-container { padding: 15px; }
             .input-grid { grid-template-columns: 1fr; } /* Stacks inputs 1 per row */
             .results-grid { grid-template-columns: 1fr; } /* Stacks results 1 per row */
-            .planning-grid { grid-template-columns: 1fr; } /* Stacks planning boxes 1 per row */
-            .metric-box, .plan-box { padding: 10px; }
+            .metric-box { padding: 10px; }
         }
     </style>
 </head>
@@ -106,27 +97,10 @@
         <div class="indication" id="resultIndication"></div>
     </div>
 
-    <div class="planning-section" id="planningSection">
-        <div class="planning-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-            SRO Planning Goal (Floor: 4°)
-        </div>
-        <div class="planning-grid">
-            <div class="plan-box">
-                <div class="metric-label">Limited Correction</div>
-                <div class="plan-value" id="valCorrection">-0.0°</div>
-            </div>
-            <div class="plan-box">
-                <div class="metric-label">Target Post-Op PTS</div>
-                <div class="plan-value" id="valTargetPts">0.0°</div>
-            </div>
-            <div class="plan-box" id="boxResidual" style="background:#e6fffa; border-color:#38b2ac;">
-                <div class="metric-label">Residual Pathological ΔsATT</div>
-                <div class="plan-value" id="valResidual" style="color:#2c7a7b;">0.0%</div>
-            </div>
-            <div class="plan-warning" id="warningMessage"></div>
-        </div>
+    <div class="disclosure">
+        <strong>Clinical Use Disclosure:</strong> This calculator serves as an explanatory computational model designed to illustrate the biomechanical approach described in this article using currently available data. It does not constitute formal medical advice or a definitive surgical treatment recommendation. The application of these concepts to patient-specific scenarios remains the sole clinical responsibility of the treating surgeon. This tool should be regarded strictly as a simplified educational and conceptual guide.
     </div>
+
 </div>
 
 <script>
@@ -155,104 +129,37 @@
 
         let phenotype = "Unclassified Data";
         let indication = "Clinical correlation required.";
-        let sroIndicated = false;
 
         if (steepBone && pathologicalShift && chronic && laxity) {
-            phenotype = "The Triple Hit (Catastrophic)"; indication = "Indication: Critical. Mandatory SRO."; sroIndicated = true;
+            phenotype = "The Triple Hit (Catastrophic)"; indication = "Indication: Critical. Mandatory SRO."; 
         } else if (steepBone && pathologicalShift && chronic && !laxity) {
-            phenotype = "Double Hit A (Synergistic Failure)"; indication = "Indication: High. SRO critical to restore equilibrium."; sroIndicated = true;
+            phenotype = "Double Hit A (Synergistic Failure)"; indication = "Indication: High. SRO critical to restore equilibrium."; 
         } else if (steepBone && pathologicalShift && !chronic && laxity) {
-            phenotype = "Double Hit C (Compounded Risk)"; indication = "Indication: Moderate to High. Consider SRO + LET."; sroIndicated = true;
+            phenotype = "Double Hit C (Compounded Risk)"; indication = "Indication: Moderate to High. Consider SRO + LET."; 
         } else if (!steepBone && pathologicalShift && !chronic && laxity) {
-            phenotype = "Double Hit B (Acute-on-Baseline)"; indication = "Indication: Moderate. Heightened need for augmented stabilization."; sroIndicated = true;
+            phenotype = "Double Hit B (Acute-on-Baseline)"; indication = "Indication: Moderate. Heightened need for augmented stabilization."; 
         } else if (steepBone && pathologicalShift && !chronic && !laxity) {
-            phenotype = "Type 1: Osseous (PTS-Driven)"; indication = "Indication: Moderate to High. Proactive SRO protects intact secondary stabilizers."; sroIndicated = true;
+            phenotype = "Type 1: Osseous (PTS-Driven)"; indication = "Indication: Moderate to High. Proactive SRO protects intact secondary stabilizers."; 
         } else if (!steepBone && pathologicalShift && chronic && !laxity) {
-            phenotype = "Type 2: Acquired Soft-Tissue"; indication = "Indication: Moderate to High. SRO protects central pivot/meniscal repair."; sroIndicated = true;
+            phenotype = "Type 2: Acquired Soft-Tissue"; indication = "Indication: Moderate to High. SRO protects central pivot/meniscal repair."; 
         } else if (laxity && benignShift) {
-            phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)"; indication = "Indication: Low / Contraindicated. Risk of overtreatment."; sroIndicated = false;
+            phenotype = "Type 3: Inherent Soft-Tissue (Hyperlaxity)"; indication = "Indication: Low / Contraindicated. Risk of overtreatment."; 
         } else if (transitionZone) {
             phenotype = "Transition / Gray Zone (Sub-Critical Shift)"; 
             indication = "Indication: Borderline. Ongoing decompensation. SRO planning is optional/preventative."; 
-            sroIndicated = true;
         } else if (adjDeltaSatt > 0 && !benignShift) {
-            phenotype = "Atypical Pathological Shift"; indication = "Indication: Evaluated on a case-by-case basis."; sroIndicated = true;
+            phenotype = "Atypical Pathological Shift"; indication = "Indication: Evaluated on a case-by-case basis."; 
         } else if (benignShift && !laxity) {
-            phenotype = "Physiological Sagittal Baseline"; indication = "Indication: Low. Shift is within physiological noise."; sroIndicated = false;
+            phenotype = "Physiological Sagittal Baseline"; indication = "Indication: Low. Shift is within physiological noise."; 
         }
 
         // SAFETY OVERRIDE: HARD LIMIT AT OR BELOW 11 DEGREES
-        if (ptsI <= 11) {
-            sroIndicated = false; 
+        if (ptsI <= 11 && !benignShift) {
             indication = "Indication: SRO CONTRAINDICATED (Index PTS ≤ 11°). Proceed with soft-tissue/meniscal management only.";
         }
 
         document.getElementById('resultPhenotype').innerText = phenotype;
         document.getElementById('resultIndication').innerText = indication;
-
-        // Surgical Planning Logic
-        const planningSection = document.getElementById('planningSection');
-        const warningMessage = document.getElementById('warningMessage');
-        const boxResidual = document.getElementById('boxResidual');
-        const valResidual = document.getElementById('valResidual');
-        
-        if (sroIndicated && adjDeltaSatt > 0) {
-            planningSection.style.display = 'block';
-            
-            // The Mathematical Ideal
-            const idealCorrection = adjDeltaSatt / 1.2;
-            const idealTargetPts = ptsI - idealCorrection;
-            
-            // The Clinical Reality (Floor Limit at 4 degrees)
-            const minAllowedPts = 4.0;
-            let finalTargetPts = idealTargetPts;
-            let finalCorrection = idealCorrection;
-            let residualShift = 0.0;
-            let hitLimit = false;
-
-            if (idealTargetPts < minAllowedPts) {
-                finalTargetPts = minAllowedPts;
-                finalCorrection = Math.max(0, ptsI - minAllowedPts); 
-                residualShift = adjDeltaSatt - (finalCorrection * 1.2);
-                hitLimit = true;
-            }
-            
-            document.getElementById('valCorrection').innerText = '-' + finalCorrection.toFixed(1) + '°';
-            document.getElementById('valTargetPts').innerText = finalTargetPts.toFixed(1) + '°';
-            valResidual.innerText = residualShift.toFixed(1) + '%';
-
-            // Visual Styling for Residual Shift
-            if (hitLimit && residualShift > 0) {
-                boxResidual.classList.add('residual-alert');
-                boxResidual.style.background = ''; 
-                boxResidual.style.borderColor = '';
-                valResidual.style.color = '';
-            } else {
-                boxResidual.classList.remove('residual-alert');
-                boxResidual.style.background = '#e6fffa';
-                boxResidual.style.borderColor = '#38b2ac';
-                valResidual.style.color = '#2c7a7b';
-            }
-
-            // Safety Warnings
-            let warnings = [];
-            if (hitLimit) {
-                warnings.push("⚠️ SAFETY LIMIT REACHED: Target PTS capped at 4° to avoid iatrogenic flattening/recurvatum. Full neutralization of sATT via bone is not possible. A residual pathological shift will remain, necessitating robust concurrent soft-tissue procedures.");
-            }
-            if (finalCorrection >= 10) {
-                warnings.push("⚠️ BIOMECHANICAL WARNING: Required correction is massive (≥10°). Consider biplanar osteotomy to mitigate lateral hinge fracture risk.");
-            }
-
-            if (warnings.length > 0) {
-                warningMessage.innerHTML = warnings.join('<br><br>');
-                warningMessage.style.display = 'block';
-            } else {
-                warningMessage.style.display = 'none';
-            }
-
-        } else {
-            planningSection.style.display = 'none';
-        }
     }
 
     // Initialize on load

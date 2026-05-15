@@ -30,6 +30,9 @@
         .phenotype-title { font-size: 1.25em; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
         .indication { font-size: 1em; color: #c53030; font-weight: 600; }
 
+        .disclosure { font-size: 0.75em; color: #718096; background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 25px; line-height: 1.5; text-align: justify; }
+        .disclosure strong { color: #4a5568; }
+
         /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 600px) {
             .calculator-container { padding: 15px; }
@@ -92,6 +95,10 @@
     <div class="phenotype-result">
         <div class="phenotype-title" id="resultPhenotype">Awaiting inputs...</div>
         <div class="indication" id="resultIndication"></div>
+    </div>
+
+    <div class="disclosure">
+        <strong>Clinical Use Disclosure:</strong> This calculator serves as an explanatory computational model designed to illustrate the biomechanical approach described in this article using currently available data. It does not constitute formal medical advice or a definitive surgical treatment recommendation. The application of these concepts to patient-specific scenarios remains the sole clinical responsibility of the treating surgeon. This tool should be regarded strictly as a simplified educational and conceptual guide.
     </div>
 
 </div>

@@ -29,7 +29,7 @@
         .phenotype-result { background: #ebf8fa; border-left: 6px solid #3182ce; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
         .phenotype-title { font-size: 1.25em; font-weight: bold; color: #2c3e50; margin-bottom: 8px; }
         .indication { font-size: 1em; color: #c53030; font-weight: 600; }
-
+        
         /* Surgical Planning Section Styles */
         .planning-section { background: #fffaf0; border: 1px solid #feebc8; padding: 20px; border-radius: 8px; display: none; }
         .planning-title { font-size: 1.1em; font-weight: bold; color: #dd6b20; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
@@ -41,10 +41,7 @@
         .residual-alert { background: #fff5f5 !important; border-color: #fc8181 !important; }
         .residual-alert .plan-value { color: #e53e3e !important; }
 
-        .disclosure { font-size: 0.75em; color: #718096; background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 25px; line-height: 1.5; text-align: justify; }
-        .disclosure strong { color: #4a5568; }
-
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE RESPONSIVENESS (New Code) --- */
         @media (max-width: 600px) {
             .calculator-container { padding: 15px; }
             .input-grid { grid-template-columns: 1fr; } /* Stacks inputs 1 per row */
@@ -109,7 +106,6 @@
         <div class="indication" id="resultIndication"></div>
     </div>
 
-    <!-- Surgical Planning Section -->
     <div class="planning-section" id="planningSection">
         <div class="planning-title">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -131,11 +127,6 @@
             <div class="plan-warning" id="warningMessage"></div>
         </div>
     </div>
-
-    <div class="disclosure">
-        <strong>Clinical Use Disclosure:</strong> This calculator serves as an explanatory computational model designed to illustrate the biomechanical approach described in this article using currently available data. It does not constitute formal medical advice or a definitive surgical treatment recommendation. The application of these concepts to patient-specific scenarios remains the sole clinical responsibility of the treating surgeon. This tool should be regarded strictly as a simplified educational and conceptual guide.
-    </div>
-
 </div>
 
 <script>
@@ -191,7 +182,7 @@
         }
 
         // SAFETY OVERRIDE: HARD LIMIT AT OR BELOW 11 DEGREES
-        if (ptsI <= 11 && !benignShift) {
+        if (ptsI <= 11) {
             sroIndicated = false; 
             indication = "Indication: SRO CONTRAINDICATED (Index PTS ≤ 11°). Proceed with soft-tissue/meniscal management only.";
         }

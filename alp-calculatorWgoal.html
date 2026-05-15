@@ -41,7 +41,11 @@
         .residual-alert { background: #fff5f5 !important; border-color: #fc8181 !important; }
         .residual-alert .plan-value { color: #e53e3e !important; }
 
-        /* --- MOBILE RESPONSIVENESS (New Code) --- */
+        /* Disclosure Styles */
+        .disclosure { font-size: 0.75em; color: #718096; background-color: #f7fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; margin-top: 25px; line-height: 1.5; text-align: justify; }
+        .disclosure strong { color: #4a5568; }
+
+        /* --- MOBILE RESPONSIVENESS --- */
         @media (max-width: 600px) {
             .calculator-container { padding: 15px; }
             .input-grid { grid-template-columns: 1fr; } /* Stacks inputs 1 per row */
@@ -126,6 +130,11 @@
             </div>
             <div class="plan-warning" id="warningMessage"></div>
         </div>
+    </div>
+
+    <!-- Clinical Disclosure Added Here -->
+    <div class="disclosure">
+        <strong>Clinical Use Disclosure:</strong> This calculator serves as an explanatory computational model designed to illustrate the biomechanical approach described in this article using currently available data. It does not constitute formal medical advice or a definitive surgical treatment recommendation. The application of these concepts to patient-specific scenarios remains the sole clinical responsibility of the treating surgeon. This tool should be regarded strictly as a simplified educational and conceptual guide.
     </div>
 </div>
 
